@@ -53,17 +53,30 @@ app.post('/game-start', (req, res) => {
 	const embedFields = [];
 
 	// Parcours des clés de l'objet players
+	let playerCount = 0;
+	let playersInformation = [];
+
 	for (const steamid in players) {
 		if (Object.hasOwnProperty.call(players, steamid)) {
 			const player = players[steamid];
 			// Construction des informations pour chaque joueur
-			const fieldValue = `XP: ${player.xp_in_level}/${player.xp_next_level}\n` +
-							`Rank: ${player.rank_title + "(" + player.rank_id + ")"}\n` +
-							`Winrate: ${getPlayerWinrate(player.seasonal_winrate)}\n` +
-							`Donator status: ${getDonatorStatus(player.status)}\n\n`;
+			const playerInfo = `XP: ${player.xp_in_level}/${player.xp_next_level}\n` +
+				`Rank: ${player.rank_title + "(" + player.rank_id + ")"}\n` +
+				`Winrate: ${getPlayerWinrate(player.seasonal_winrate)}\n` +
+				`Donator status: ${getDonatorStatus(player.status)}`;
 
-			// Ajout des informations à embedFields
-			embedFields.push({ name: player.personaname + " (" + steamid + ")", value: fieldValue, inline: true });
+			playersInformation.push({ name: player.personaname + " (" + steamid + ")", value: playerInfo, inline: true });
+			playerCount++;
+		}
+
+		// Ajouter "VS" après le premier joueur
+		if (playerCount === 1) {
+			playersInformation.push({ name: "VS", value: "\u200B", inline: true }); // Utilise \u200B pour ajouter une espace invisible
+		}
+
+		// Sortir de la boucle après avoir traité les deux joueurs
+		if (playerCount >= 2) {
+			break;
 		}
 	}
 
