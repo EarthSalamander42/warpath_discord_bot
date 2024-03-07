@@ -17,6 +17,29 @@ const client = new Client({
 	]
 });
 
+const donator_status = {
+	100: 'Owner',
+	101: 'Lead-Dev',
+	102: 'Administrator',
+	103: 'Alpha-Tester',
+	1: 'Bronze donator',
+	2: 'Silver donator',
+	3: 'Golden donator',
+	4: 'Platinum donator',
+}
+
+function getDonatorStatus(status) {
+	return donator_status[status] || 'None';
+}
+
+function getPlayerWinrate(winrate) {
+	if (winrate && parseFloat(winrate) > 0) {
+		return winrate.toFixed(2) + '%';
+	} else {
+		return 'N/A';
+	}
+}
+
 const token = config.token; // Remplace avec ton propre token Discord
 
 app.use(bodyParser.json());
@@ -35,12 +58,12 @@ app.post('/game-start', (req, res) => {
 			const player = players[steamid];
 			// Construction des informations pour chaque joueur
 			const fieldValue = `XP: ${player.xp_in_level}/${player.xp_next_level}\n` +
-							`Rank: ${player.rank_title}\n` +
-							`Winrate: ${player.seasonal_winrate}\n` +
-							`Donator status: ${player.status}\n\n`;
+							`Rank: ${player.rank_title + "(" + player.rank_id + ")"}\n` +
+							`Winrate: ${getPlayerWinrate(player.seasonal_winrate)}\n` +
+							`Donator status: ${getDonatorStatus(player.status)}\n\n`;
 
 			// Ajout des informations à embedFields
-			embedFields.push({ name: player.personaname + "(" + steamid + ")", value: fieldValue, inline: true });
+			embedFields.push({ name: player.personaname + " (" + steamid + ")", value: fieldValue, inline: true });
 		}
 	}
 
