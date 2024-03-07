@@ -27,20 +27,33 @@ app.post('/game-start', (req, res) => {
 	console.log(players);
 
 	// Make a great looking embed showing the 2 players, their steam avatar, their xp, their rank, and their winrate and their donator status
-	if (channel) {
-		const embed = {
-			color: 0x0099ff,
-			title: 'Game started',
-			description: `Match ID: ${match_id}`,
-			fields: players.map((player) => {
-				return {
-					name: player.name,
-					value: "XP: " + player.xp_in_level + "/ " + player.xp_next_level + "\nRank: " + player.rank_title + "\nWinrate: " + player.seasonal_winrate + "" + "\nDonator status: " + player.status + "\n\n",
-					inline: true,
-				};
-			}),
-		};
+	const embedFields = [];
 
+	// Parcours des clés de l'objet players
+	for (const steamid in players) {
+		if (Object.hasOwnProperty.call(players, steamid)) {
+			const player = players[steamid];
+			// Construction des informations pour chaque joueur
+			const fieldValue = `XP: ${player.xp_in_level}/${player.xp_next_level}\n` +
+							`Rank: ${player.rank_title}\n` +
+							`Winrate: ${player.seasonal_winrate}\n` +
+							`Donator status: ${player.status}\n\n`;
+
+			// Ajout des informations à embedFields
+			embedFields.push({ name: steamid, value: fieldValue, inline: true });
+		}
+	}
+
+	// Construction de l'embed avec les informations des joueurs
+	const embed = {
+		color: 0x0099ff,
+		title: 'Game started',
+		description: `Match ID: ${match_id}`,
+		fields: embedFields
+	};
+
+	// Envoi de l'embed sur le canal Discord
+	if (channel) {
 		channel.send({ embeds: [embed] });
 	} else {
 		console.log('Channel not found');
