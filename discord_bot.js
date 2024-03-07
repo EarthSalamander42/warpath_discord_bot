@@ -40,7 +40,7 @@ app.post('/game-start', (req, res) => {
 							`Donator status: ${player.status}\n\n`;
 
 			// Ajout des informations à embedFields
-			embedFields.push({ name: steamid, value: fieldValue, inline: true });
+			embedFields.push({ name: player.personaname + "(" + steamid + ")", value: fieldValue, inline: true });
 		}
 	}
 
