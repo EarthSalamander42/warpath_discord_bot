@@ -33,7 +33,7 @@ function getDonatorStatus(status) {
 }
 
 function getPlayerWinrate(winrate) {
-	if (winrate && parseFloat(winrate) > 0) {
+	if (winrate && typeof(winrate) == "number" && parseFloat(winrate) > 0) {
 		return winrate.toFixed(2) + '%';
 	} else {
 		return 'N/A';
@@ -59,7 +59,7 @@ app.post('/game-start', (req, res) => {
 			// Construction des informations pour chaque joueur
 			const fieldValue = `XP: ${player.xp_in_level}/${player.xp_next_level}\n` +
 							`Rank: ${player.rank_title + "(" + player.rank_id + ")"}\n` +
-							`Winrate: ${getPlayerWinrate(player.seasonal_winrate)}\n` +
+							`Winrate: ${getPlayerWinrate(player.winrate_toggle)}\n` +
 							`Donator status: ${getDonatorStatus(player.status)}\n\n`;
 
 			// Ajout des informations à embedFields
