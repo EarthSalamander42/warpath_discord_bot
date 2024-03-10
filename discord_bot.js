@@ -45,6 +45,7 @@ const token = config.token; // Remplace avec ton propre token Discord
 app.use(bodyParser.json());
 
 app.post('/game-start', (req, res) => {
+	console.log('Received a game start request');
 	const { players, match_id } = req.body;
 	const channel = client.channels.cache.get('1215237207292383302'); // Remplace avec l'ID du canal Discord
 	console.log(players);
