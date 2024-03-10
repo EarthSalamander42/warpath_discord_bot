@@ -58,8 +58,8 @@ app.post('/game-start', (req, res) => {
 		if (Object.hasOwnProperty.call(players, steamid)) {
 			const player = players[steamid];
 			// Construction des informations pour chaque joueur
-			const fieldValue = `XP: ${player.xp_in_level}/${player.xp_next_level}\n` +
-							`Rank: ${player.rank_title + "(" + player.rank_id + ")"}\n` +
+			const fieldValue = `Level ${player.xp_level} (${player.xp_in_level}/${player.xp_next_level} xp)\n` +
+							`Rank: ${player.rank_title + " (" + player.rank_id + ")"}\n` +
 							`Winrate: ${getPlayerWinrate(player.winrate_toggle)}\n` +
 							`Donator status: ${getDonatorStatus(player.status)}\n\n`;
 
